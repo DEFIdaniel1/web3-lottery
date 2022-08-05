@@ -52,10 +52,3 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 }
 
 module.exports.tags = ['all', 'lottery']
-// constructor(
-//     address vrfCoordinatorV2, //external contract address. need MOCKS to work
-//     uint256 entranceFee,
-//     bytes32 gasLane,
-//     uint64 subscriptionId,
-//     uint32 callbackGasLimit,
-//     uint256 interval

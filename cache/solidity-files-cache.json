@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/nala/Documents/Coding Projects/Solidity/lottery-smartContract-hh/contracts/Lottery.sol": {
-      "lastModificationDate": 1659724259080,
-      "contentHash": "30f193187ade4fc38905cdc6d1b977aa",
+      "lastModificationDate": 1659733677029,
+      "contentHash": "3a65462c063f6731f1826349978bd0ea",
       "sourceName": "contracts/Lottery.sol",
       "solcConfig": {
         "version": "0.8.9",
