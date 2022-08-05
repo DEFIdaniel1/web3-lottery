@@ -18,9 +18,9 @@ const networkConfig = {
         interval: '30', //seconds
     },
 }
-const developmentchains = ['hardhat', 'localhost']
+const developmentChains = ['hardhat', 'localhost']
 
 module.exports = {
     networkConfig,
-    developmentchains,
+    developmentChains,
 }

@@ -1,16 +1,17 @@
 const { network, ethers } = require('hardhat')
-const { developmentchains, networkConfig } = require('../helper-hardhat-config')
+const { developmentChains, networkConfig } = require('../helper-hardhat-config')
+const { verify } = require('../utils/verify')
 
 const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther('30')
 //need to fund the chainlink subscription, use LINK on real networks
 
-module.exports = async function (getNamedAccounts, deployments) {
+module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
     let vrfCoordinatorV2Address, subscriptionId
 
-    if (developmentchains.includes(network.name)) {
+    if (developmentChains.includes(network.name)) {
         const vrfCoordinatorV2Mock = await ethers.getContract('VRFCoordinatorV2Mock')
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
 
@@ -42,8 +43,15 @@ module.exports = async function (getNamedAccounts, deployments) {
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
+
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API) {
+        log('Verifying contract...')
+        await verify(lottery.address, args)
+    }
+    log('-------------------------------')
 }
 
+module.exports.tags = ['all', 'lottery']
 // constructor(
 //     address vrfCoordinatorV2, //external contract address. need MOCKS to work
 //     uint256 entranceFee,

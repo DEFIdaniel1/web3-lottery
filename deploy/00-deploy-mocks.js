@@ -1,4 +1,5 @@
 const { developmentChains } = require('../helper-hardhat-config')
+const { ethers } = require('hardhat')
 
 const BASE_FEE = ethers.utils.parseEther('0.25') // premium = 0.25 LINK per request
 const GAS_PRICE_LINK = 1e9 // 1000000000 //variable LINK/gas based on chain's gas fees since CL is paying for requests
