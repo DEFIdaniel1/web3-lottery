@@ -4,11 +4,11 @@ require('hardhat-deploy')
 require('solidity-coverage')
 require('hardhat-gas-reporter')
 require('hardhat-contract-sizer')
-require('dotenv').config
+require('dotenv').config()
 
 const RINKEBY_URL = process.env.RINKEBY_URL || 'rinkeby-key'
 const POLYGON_TEST_URL = process.env.POLYGON_TEST_URL || 'rinkeby-key'
-const PRIVATE_KEY = process.env.PRIVATE_KEY || '0xkey'
+const PRIVATE_KEY = process.env.PRIVATE_KEY || '0x0noKey'
 const ETHERSCAN_API = process.env.ETHERSCAN_API || 'etherscan-key'
 const COINMARKETCAP_API = process.env.COINMARKETCAP_API || 'coinmarketcap-key'
 
