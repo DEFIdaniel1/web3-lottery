@@ -3,7 +3,8 @@ const { network, ethers, getNamedAccounts } = require('hardhat')
 const { developmentChains, networkConfig } = require('../../helper-hardhat-config')
 
 !developmentChains.includes(network.name)
-    ? describe.skip
+    ? //skip if NOT dev chain
+      describe.skip
     : describe('Lottery Unit Tests', function () {
           let lottery, vrfCoordinatorV2Mock, deployer, interval
           const chainId = network.config.chainId
@@ -124,7 +125,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   assert.equal(lotteryState, 1) //1 is CALCULATING status
               })
           })
-          describe.only('fulfillRandomWords', function () {
+          describe('fulfillRandomWords', function () {
               //need someone to enter the lottery and time to pass first
               beforeEach(async function () {
                   await lottery.enterLottery({ value: lotteryEntranceFee })
