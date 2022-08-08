@@ -4,7 +4,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
 
 !developmentChains.includes(network.name)
     ? describe.skip
-    : describe('Lottery Unit Tests', async function () {
+    : describe('Lottery Unit Tests', function () {
           let lottery, vrfCoordinatorV2Mock, deployer, interval
           const chainId = network.config.chainId
 
@@ -16,7 +16,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
               lotteryEntranceFee = await lottery.getEntranceFee()
               interval = await lottery.getInterval()
           })
-          describe('constructor', async function () {
+          describe('constructor', function () {
               //ideally want 1 assert per "it"
               it('lottery state is OPEN', async function () {
                   const lotteryState = await lottery.getLotteryState()
@@ -28,7 +28,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   assert.equal(interval, expectedInterval)
               })
           })
-          describe('enterLottery', async function () {
+          describe('enterLottery', function () {
               it('function executes when enough ETH is sent and is added to contract balance', async function () {
                   let testValue = ethers.utils.parseEther('0.1')
                   await lottery.enterLottery({ value: testValue })
@@ -66,7 +66,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   ).to.be.revertedWithCustomError(lottery, 'Lottery__LotteryNotOpen')
               })
           })
-          describe('checkUpkeep', async function () {
+          describe('checkUpkeep', function () {
               it("returns false if people haven't sent ETH", async function () {
                   await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
                   await network.provider.send('evm_mine', [])
@@ -96,6 +96,32 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   await network.provider.request({ method: 'evm_mine', params: [] })
                   const { upkeepNeeded } = await lottery.callStatic.checkUpkeep([]) // upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers)
                   assert.equal(upkeepNeeded, true)
+              })
+          })
+          describe('performUpkeep', function () {
+              it('can only run if checkUpkeep is true', async function () {
+                  await lottery.enterLottery({ value: lotteryEntranceFee })
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
+                  await network.provider.send('evm_mine', [])
+                  const tx = await lottery.performUpkeep([])
+                  assert(tx) // assert
+              })
+              it('reverts when checkUpkee is false', async function () {
+                  await expect(lottery.performUpkeep([])).to.be.revertedWithCustomError(
+                      lottery,
+                      'error_LotteryUpkeepNotNeeded'
+                  )
+              })
+              it('updates lotteryState, emits event, and calls VRFCoordinator', async function () {
+                  await lottery.enterLottery({ value: lotteryEntranceFee })
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
+                  await network.provider.send('evm_mine', [])
+                  const performUpkeepTx = await lottery.performUpkeep([])
+                  const txReceipt = await performUpkeepTx.wait(1)
+                  const requestId = await txReceipt.events[1].args.requestId //2nd event b/c chainlink contract also emits event first
+                  const lotteryState = await lottery.getLotteryState()
+                  assert(requestId.toNumber() > 0)
+                  assert.equal(lotteryState, 1) //1 is CALCULATING status
               })
           })
       })

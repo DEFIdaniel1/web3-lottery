@@ -39,7 +39,7 @@ module.exports = {
         apiKey: ETHERSCAN_API,
     },
     gasReporter: {
-        enabled: true,
+        enabled: false,
         outputFile: 'gas-report.txt',
         noColors: true,
         coinmarketcap: COINMARKETCAP_API,
