@@ -26,17 +26,4 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   assert.equal(interval, expectedInterval)
               })
           })
-          //   describe('constructor', function () {
-          //       it('intitializes the raffle correctly', async () => {
-          //           // Ideally, we'd separate these out so that only 1 assert per "it" block
-          //           // And ideally, we'd make this check everything
-          //           const raffleState = (await raffle.getRaffleState()).toString()
-          //           // Comparisons for Raffle initialization:
-          //           assert.equal(raffleState, '0')
-          //           assert.equal(
-          //               interval.toString(),
-          //               networkConfig[network.config.chainId]['keepersUpdateInterval']
-          //           )
-          //       })
-          //   })
       })
