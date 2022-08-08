@@ -190,4 +190,8 @@ contract Lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
     function getInterval() public view returns (uint256) {
         return i_interval;
     }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
 }

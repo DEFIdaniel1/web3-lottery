@@ -5,7 +5,7 @@ coverage.json
 typechain
 typechain-types
 .solhint.json
-gas-report.txt
+gas-report
 
 
 #Hardhat files

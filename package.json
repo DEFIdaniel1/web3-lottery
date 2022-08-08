@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/DEFIdaniel1/web3-lottery#readme",
     "devDependencies": {
-        "@chainlink/contracts": "^0.4.2",
+        "@chainlink/contracts": "^0.4.1",
         "@nomicfoundation/hardhat-toolbox": "^1.0.2",
         "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
         "dotenv": "^16.0.1",
