@@ -1,10 +1,10 @@
-require('@nomiclabs/hardhat-waffle')
-require('@nomiclabs/hardhat-etherscan')
+require('@nomicfoundation/hardhat-toolbox')
 require('hardhat-deploy')
-require('solidity-coverage')
-require('hardhat-gas-reporter')
-require('hardhat-contract-sizer')
+require('@nomiclabs/hardhat-ethers')
 require('dotenv').config()
+require('ethers')
+require('hardhat-gas-reporter')
+require('solidity-coverage')
 
 const RINKEBY_URL = process.env.RINKEBY_URL || 'rinkeby-key'
 const POLYGON_TEST_URL = process.env.POLYGON_TEST_URL || 'rinkeby-key'
@@ -13,7 +13,7 @@ const ETHERSCAN_API = process.env.ETHERSCAN_API || 'etherscan-key'
 const COINMARKETCAP_API = process.env.COINMARKETCAP_API || 'coinmarketcap-key'
 
 module.exports = {
-    solidity: '0.8.9',
+    solidity: '0.8.7',
     defaultNetwork: 'hardhat',
     networks: {
         rinkeby: {
@@ -55,5 +55,8 @@ module.exports = {
             default: 1,
             4: 1,
         },
+    },
+    mocha: {
+        timeout: 500000, // 500 seconds max for running tests
     },
 }

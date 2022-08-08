@@ -1,5 +1,12 @@
 node_modules
 .env
+coverage
+coverage.json
+typechain
+typechain-types
 .solhint.json
-artifacts
+
+#Hardhat files
 cache
+artifacts
+
