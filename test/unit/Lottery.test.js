@@ -29,7 +29,7 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
               })
           })
           describe('enterLottery', async function () {
-              it.only('function executes when enough ETH is sent and is added to contract balance', async function () {
+              it('function executes when enough ETH is sent and is added to contract balance', async function () {
                   let testValue = ethers.utils.parseEther('0.1')
                   await lottery.enterLottery({ value: testValue })
                   const lotteryBalance = await lottery.getBalance()
@@ -64,6 +64,38 @@ const { developmentChains, networkConfig } = require('../../helper-hardhat-confi
                   await expect(
                       lottery.enterLottery({ value: lotteryEntranceFee })
                   ).to.be.revertedWithCustomError(lottery, 'Lottery__LotteryNotOpen')
+              })
+          })
+          describe('checkUpkeep', async function () {
+              it("returns false if people haven't sent ETH", async function () {
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
+                  await network.provider.send('evm_mine', [])
+                  const { upkeepNeeded } = await lottery.callStatic.checkUpkeep([])
+                  assert.equal(upkeepNeeded, false) //should be false
+              })
+              it('returns false if lottery is NOT open', async function () {
+                  await lottery.enterLottery({ value: lotteryEntranceFee })
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
+                  await network.provider.send('evm_mine', [])
+                  await lottery.performUpkeep('0x') //0x is hh shorthand for a blank object
+                  const lotteryState = await lottery.getLotteryState()
+                  const { upkeepNeeded } = await lottery.callStatic.checkUpkeep([])
+                  assert.equal(lotteryState.toString(), '1') //1 = calculating in the enum
+                  assert.equal(upkeepNeeded, false) //should be false
+              })
+              it("returns false if enough time hasn't passed", async () => {
+                  await lottery.enterLottery({ value: lotteryEntranceFee })
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() - 1])
+                  await network.provider.request({ method: 'evm_mine', params: [] })
+                  const { upkeepNeeded } = await lottery.callStatic.checkUpkeep([]) // upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers)
+                  assert.equal(upkeepNeeded, false)
+              })
+              it('returns true if enough time has passed, has players, eth, and is open', async () => {
+                  await lottery.enterLottery({ value: lotteryEntranceFee })
+                  await network.provider.send('evm_increaseTime', [interval.toNumber() + 1])
+                  await network.provider.request({ method: 'evm_mine', params: [] })
+                  const { upkeepNeeded } = await lottery.callStatic.checkUpkeep([]) // upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers)
+                  assert.equal(upkeepNeeded, true)
               })
           })
       })
