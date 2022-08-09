@@ -8,14 +8,14 @@ const networkConfig = {
         gasLane: '0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc',
         subscriptionId: '9945',
         callbackGasLimit: '500000',
-        interval: '30', //seconds
+        interval: '10', //seconds
     },
     31337: {
         name: 'hardhat',
         entranceFee: ethers.utils.parseEther('0.1'),
         gasLane: '0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc', //local doesn't matter, just needs value
         callbackGasLimit: '500000',
-        interval: '30', //seconds
+        interval: '10', //seconds
     },
 }
 const developmentChains = ['hardhat', 'localhost']
